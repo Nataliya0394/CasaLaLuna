@@ -6,10 +6,8 @@
     <title>CASA LA LUNA</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
-
-    <!-- Подключаем пиксельный шрифт -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    
+
     <style>
       #loading-placeholder {
         position: absolute;
@@ -21,6 +19,59 @@
         color: white;
         z-index: 9999;
         pointer-events: none;
+        text-align: center;
+      }
+
+      #rotate-device {
+        position: absolute;
+        top: calc(50% + 90px); /* немного ниже LOADING... */
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        z-index: 9999;
+        pointer-events: none;
+        display: none;
+        animation: fadeIn 1s ease-in-out;
+      }
+
+      #rotate-device .phone-icon {
+        width: 60px;
+        height: 100px;
+        margin: 0 auto 10px auto;
+        border: 4px solid white;
+        border-radius: 12px;
+        position: relative;
+        animation: tiltPhone 2.5s infinite ease-in-out;
+        box-sizing: border-box;
+      }
+
+      #rotate-device .phone-icon::after {
+        content: '';
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 10px;
+        height: 10px;
+        background: white;
+        border-radius: 50%;
+      }
+
+      .rotate-text {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 12px;
+        color: white;
+      }
+
+        @keyframes tiltPhone {
+        0% { transform: rotate(0deg); }
+        30% { transform: rotate(-90deg); }
+        60% { transform: rotate(-90deg); }
+        100% { transform: rotate(0deg); }
+        }
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
       }
     </style>
   </head>
@@ -29,7 +80,14 @@
       <canvas id="unity-canvas" width=960 height=600></canvas>
 
       <!-- Заглушка LOADING... -->
-      <div id="loading-placeholder">LOADING...</div>
+      <div id="loading-placeholder">
+        LOADING...
+        <!-- Анимация ПОВЕРНИ УСТРОЙСТВО -->
+        <div id="rotate-device">
+          <div class="phone-icon"></div>
+          <div class="rotate-text">Поверните устройство</div>
+        </div>
+      </div>
 
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
@@ -92,6 +150,9 @@
         container.className = "unity-mobile";
         canvas.className = "unity-mobile";
         unityShowBanner('WebGL builds are not supported on mobile devices.');
+
+        // Показываем анимацию телефона
+        document.getElementById("rotate-device").style.display = "block";
       } else {
         canvas.style.width = "960px";
         canvas.style.height = "600px";
